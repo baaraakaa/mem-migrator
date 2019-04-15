@@ -92,7 +92,7 @@ def make():
         if count == TESTING_LIMIT:
             break
 
-    print(f'{len(collections)} Collections Created')
+    print(str(len(collections)) + 'Collections Created')
     for key,collection in collections.items():
         if 'displayName' not in collection:
             collection['displayName'] = 'Untitled'
@@ -101,9 +101,9 @@ def make():
 
 def update(collection):
     print('___________________________________')
-    print(f'collection: {collection["displayName"]}')
-    print(f'type:       {collection["parentType"]}')
-    print(f'project:    {db.projects.find({"_id":collection["project"]})[0]["name"]}')
+    print('collection: ' + collection["displayName"])
+    print('type:       ' + collection["parentType"])
+    print('project:    ' + db.projects.find({"_id":collection["project"]})[0]["name"])
     print('documents:')
     col_id = db.collections.insert_one(collection).inserted_id
     for col_doc_id in collection['otherDocuments'] + collection['mainDocuments']:
