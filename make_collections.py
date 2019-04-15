@@ -4,10 +4,12 @@ from pprint import pprint
 from functools import reduce
 from datetime import datetime
 import time
+import os
 
 TESTING_LIMIT = None
 
-client = MongoClient()
+mongo_host = os.environ(['MONGODB_SERVICE_HOST']) + ':' + os.environ(['MONGODB_SERVICE_PORT'])
+client = MongoClient(host=mongo_host,username="admin",os.environ(['MONGODB_ADMIN_PASSWORD']))
 db = client.mem
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
