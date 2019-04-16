@@ -138,5 +138,3 @@ def guess_type(key):
     else: return reduce(lambda x,y: x if x[1] > y[1] else y, type_counts)[0]       
 
 make()
-while True:
-    continue
