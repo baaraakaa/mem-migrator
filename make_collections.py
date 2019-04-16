@@ -139,4 +139,4 @@ def guess_type(key):
 
 make()
 while True:
-    time.sleep(30)
+    continue
