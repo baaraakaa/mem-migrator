@@ -11,6 +11,7 @@ TESTING_LIMIT = None
 mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
 print(mongo_host)
 client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
+print(client.admin.command('ismaster'))
 db = client.mem
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
@@ -95,7 +96,7 @@ def make():
         if count == TESTING_LIMIT:
             break
 
-    print(str(len(collections)) + 'Collections Created')
+    print(str(len(collections)) + ' Collections Created')
     for key,collection in collections.items():
         if 'displayName' not in collection:
             collection['displayName'] = 'Untitled'
