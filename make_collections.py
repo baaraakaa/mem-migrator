@@ -12,6 +12,7 @@ mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERV
 print(mongo_host)
 client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
 print(client.admin.command('ismaster'))
+print(client.list_database_names())
 db = client.mem
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
@@ -137,3 +138,4 @@ def guess_type(key):
     else: return reduce(lambda x,y: x if x[1] > y[1] else y, type_counts)[0]       
 
 make()
+while(True)
