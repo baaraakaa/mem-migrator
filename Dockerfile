@@ -15,5 +15,5 @@ ENV LANG C.UTF-8
 RUN pipenv install --system --deploy --ignore-pipfile
 
 # enter
-ENTRYPOINT /bin/sh 
+ENTRYPOINT ["/bin/bash"]
 
