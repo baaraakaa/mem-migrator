@@ -9,15 +9,20 @@ import os
 TESTING_LIMIT = None
 
 mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
-print(mongo_host)
+write(mongo_host)
 client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
-print(client.admin.command('ismaster'))
-print(client.list_database_names())
-db = client.mem
+write(client.admin.command('ismaster'))
+write(client.list_database_names())
+db = client.esm
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
-print(list(documents)[:5])
+write(list(documents)[:5])
 guess_data = {}
+
+def write(s):
+    filename = "log.txt"
+    with open(filename,'a+') as f:
+        f.write(s)
 
 def make():
     collections = {}
@@ -97,7 +102,7 @@ def make():
         if count == TESTING_LIMIT:
             break
 
-    print(str(len(collections)) + ' Collections Created')
+    write(str(len(collections)) + ' Collections Created')
     for key,collection in collections.items():
         if 'displayName' not in collection:
             collection['displayName'] = 'Untitled'
@@ -105,22 +110,22 @@ def make():
         update(collection)
 
 def update(collection):
-    print('___________________________________')
-    print('collection: ' + collection["displayName"])
-    print('type:       ' + collection["parentType"])
-    print('project:    ' + db.projects.find({"_id":collection["project"]})[0]["name"])
-    print('documents:')
+    write('___________________________________')
+    write('collection: ' + collection["displayName"])
+    write('type:       ' + collection["parentType"])
+    write('project:    ' + db.projects.find({"_id":collection["project"]})[0]["name"])
+    write('documents:')
     col_id = db.collections.insert_one(collection).inserted_id
     for col_doc_id in collection['otherDocuments'] + collection['mainDocuments']:
         doc_id = db.collectiondocuments.find_one({'_id':col_doc_id})['document']
-        print('            ' + db.documents.find({'_id':doc_id})[0]['displayName'])
+        write('            ' + db.documents.find({'_id':doc_id})[0]['displayName'])
         db.documents.update_one({'_id':doc_id},{'$push':{'collections':col_id}})
     
 def guess_type(key):
     # keywords corresponding to different types
     keywords = (("Authorizations",["amendment","authorizing","approving","approval",'authorization',"permit"]),("Compliance and Enforcement",["inspection",""]))
     counter = {}
-    # print(guess_data[key])
+    # write(guess_data[key])
     # count word occurences
     for words in guess_data[key]:
         for word in words.split(' '):
@@ -131,10 +136,12 @@ def guess_type(key):
     # create counts of keywords related to types
     type_counts = [(_type,sum(map(lambda w: counter[w] if w in counter else 0,words))) for (_type,words) in keywords]
     # if no keywords appear, guess that type is "Other"
-    # print(type_counts)
+    # write(type_counts)
     if sum(list(zip(*type_counts))[1]) == 0:
         return "Other"
     # otherwise type is the one with largest number of keyword matches
     else: return reduce(lambda x,y: x if x[1] > y[1] else y, type_counts)[0]       
 
 make()
+while True:
+    continue
