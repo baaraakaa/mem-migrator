@@ -8,6 +8,11 @@ import os
 
 TESTING_LIMIT = None
 
+def write(s):
+    filename = "log.txt"
+    with open(filename,'a+') as f:
+        f.write(s)
+
 mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
 write(mongo_host)
 client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
@@ -19,10 +24,6 @@ documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},
 write(list(documents)[:5])
 guess_data = {}
 
-def write(s):
-    filename = "log.txt"
-    with open(filename,'a+') as f:
-        f.write(s)
 
 def make():
     collections = {}
