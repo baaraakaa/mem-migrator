@@ -1,0 +1,2 @@
+Mem-migrator
+pymongo>=3.7
