@@ -11,7 +11,7 @@ TESTING_LIMIT = None
 def write(s):
     filename = "log.txt"
     with open(filename,'a+') as f:
-        f.write(s)
+        f.write(str(s))
 
 mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
 write(mongo_host)
