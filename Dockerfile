@@ -15,6 +15,4 @@ ENV LANG C.UTF-8
 RUN pipenv install --system --deploy --ignore-pipfile
 
 # enter
-#CMD ["python","/script/make_collections.py"]
-CMD ["bash"]
-
+CMD ["python","/script/make_collections.py"]
