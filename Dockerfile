@@ -15,4 +15,5 @@ ENV LANG C.UTF-8
 RUN pipenv install --system --deploy --ignore-pipfile
 
 # enter
-CMD ["python","/script/make_collections.py",">","log.txt","&&","python","dummy.py"]
+#CMD ["python","/script/make_collections.py"]
+CMD ["./run.sh"]
