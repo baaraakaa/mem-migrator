@@ -9,11 +9,12 @@ import os
 TESTING_LIMIT = None
 
 mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
+print(mongo_host)
 client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
 db = client.mem
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
-
+print(list(documents)[:5])
 guess_data = {}
 
 def make():
