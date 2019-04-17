@@ -6,23 +6,32 @@ from datetime import datetime
 import time
 import os
 
-TESTING_LIMIT = None
 
+LOCAL = True
+TESTING_LIMIT = None
+FILENAME = "log.txt"
+
+os.remove(FILENAME)
 def write(s):
-    filename = "log.txt"
-    with open(filename,'a+') as f:
+    with open(FILENAME,'a+') as f:
         f.write(str(s) + '\n')
 
-mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
-write(mongo_host)
-client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
+if LOCAL:
+    client = MongoClient()
+else:
+    mongo_host = os.environ['MONGODB_SERVICE_HOST'] + ':' + os.environ['MONGODB_SERVICE_PORT']
+    write(mongo_host)
+    client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
 write(client.admin.command('ismaster'))
 write(client.list_database_names())
-db = client.esm
+db = client.mem if LOCAL else client.esm
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
-# documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
-write(list(documents)[:10])
-map(lambda d: write(d['displayName']),list(documents)[:10])
+# documents = list(documents)
+# # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
+# write(len(documents))
+# # write(list(documents)[:10])
+# # map(lambda d: write(d['displayName']),list(documents)[:10])
+# write(len(documents))
 guess_data = {}
 
 
@@ -146,5 +155,6 @@ def guess_type(key):
     else: return reduce(lambda x,y: x if x[1] > y[1] else y, type_counts)[0]       
 
 make()
-while True:
-    continue
+if not LOCAL:
+    while True:
+        continue
