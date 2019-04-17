@@ -21,6 +21,7 @@ write(client.list_database_names())
 db = client.esm
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = db.documents.find({"directoryID":32,"project":ObjectId("582244166d6ad30017cd47e1")},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
+write(list(documents)[:10])
 map(lambda d: write(d['displayName']),list(documents)[:10])
 guess_data = {}
 
