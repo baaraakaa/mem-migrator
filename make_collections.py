@@ -30,6 +30,7 @@ def make():
     collections = {}
     count = 0
     for doc in documents:
+        write(str(count) + doc['displayName'])
         col_doc_id = db.collectiondocuments.insert_one({
             "document" : doc['_id'],
             "_schemaName" : "Collectiondocument",
