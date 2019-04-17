@@ -102,7 +102,7 @@ def make():
         
         if count == TESTING_LIMIT:
             break
-    write(count + ' count')
+    write(str(count) + ' count')
     write(str(len(collections)) + ' Collections Created')
     for key,collection in collections.items():
         if 'displayName' not in collection:
