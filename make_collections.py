@@ -7,7 +7,7 @@ import time
 import os
 
 
-LOCAL = True
+LOCAL = False
 TESTING_LIMIT = None
 FILENAME = "log.txt"
 
