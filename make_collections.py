@@ -11,7 +11,8 @@ LOCAL = False
 TESTING_LIMIT = None
 FILENAME = "log.txt"
 
-os.remove(FILENAME)
+if os.path.exists(FILENAME):
+    os.remove(FILENAME)
 def write(s):
     with open(FILENAME,'a+') as f:
         f.write(str(s) + '\n')
