@@ -126,7 +126,12 @@ def update(collection):
     write('___________________________________')
     write('collection: ' + collection["displayName"])
     write('type:       ' + collection["parentType"])
-    write('project:    ' + db.projects.find({"_id":collection["project"]})[0]["name"])
+    pname = ""
+    try:
+        pname = db.projects.find({"_id":collection["project"]})[0]["name"]
+    except Exception:
+        pname = "Error"
+    write('project:    ' + pname)
     write('documents:')
     col_id = db.collections.insert_one(collection).inserted_id
     for col_doc_id in collection['otherDocuments'] + collection['mainDocuments']:
