@@ -24,7 +24,7 @@ else:
     write(mongo_host)
     client = MongoClient(host=mongo_host,username="admin",password=os.environ['MONGODB_ADMIN_PASSWORD'])
 write(client.admin.command('ismaster'))
-write(client.list_database_names())
+# write(client.list_database_names())
 db = client.mem if LOCAL else client.esm
 documents = db.documents.find({'$or':[{"collections":[]},{"collections":None}]},{"_id":1,"projectFolderType":1,"projectFolderSubType":1,"displayName":1,"project":1,"directoryID":1})
 # documents = list(documents)
@@ -40,7 +40,7 @@ def make():
     collections = {}
     count = 0
     for doc in documents:
-        write(str(count) + doc['displayName'])
+        # write(str(count) + doc['displayName'])
         col_doc_id = db.collectiondocuments.insert_one({
             "document" : doc['_id'],
             "_schemaName" : "Collectiondocument",
@@ -66,7 +66,7 @@ def make():
             "dateAdded" : datetime.now()
         }).inserted_id
 
-
+        folderName = db.folders.find_one({'project':doc['project'],'directoryID':doc['directoryID']})['displayName']
 
         count += 1
         key = str(doc['project']) + str(doc['directoryID'])
@@ -94,6 +94,7 @@ def make():
                                         "sysadmin",
                                         "public"
                                     ],
+                                    "displayName":folderName,
                                     "isForMEM" : True,
                                     "isForENV" : False,
                                     "otherDocuments" : [],
@@ -109,9 +110,13 @@ def make():
                                 }
             guess_data[key] = [doc['displayName']]
         
-        if 'displayName' not in collections[key] and 'projectFolderSubType' in doc:
-            collections[key]['displayName'] = doc['projectFolderSubType']
         
+        # if 'displayName' not in collections[key]: 
+        #     if 'projectFolderSubType' in doc:
+        #         collections[key]['displayName'] = doc['projectFolderSubType']
+        #     elif: 'projectFolderType' in doc:
+        #         collections[key]['displayName'] = doc['projectFolderType']
+
         if count == TESTING_LIMIT:
             break
     write(str(count) + ' count')
