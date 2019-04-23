@@ -1,5 +1,7 @@
 # mem-migrator
 
+This repo contains a python script intended to automatically create collections of existing documents on mem-admin, based on existing directory structure. It only creates collections including documents that are not currently in a collection, and creates collections that correspond to bottom-level directories in the document manager.
+
 ## Usage
 
 - Use the YAML build config file to add a build to Openshift.
