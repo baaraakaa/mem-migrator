@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: make-collections
+spec:
+  parallelism: 1    
+  completions: 1    
+  template:         
+    metadata:
+      name: make-collections
+    spec:
+      containers:
+      - name: make-collections
+        image: mem-migrator
+        command: ["python",  "/script/make_collections.py"]
+        env:
+        - name: MONGODB_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secrets
+              key: MONGO_ADMIN_PASSWORD
+      restartPolicy: OnFailure
